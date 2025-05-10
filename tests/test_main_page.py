@@ -2,22 +2,23 @@ import pytest
 from selenium import webdriver
 from pages.main_page import MainPage
 
-@pytest.fixture(scope="function")
-def driver():
-    driver = webdriver.Chrome()
-    driver.get("https://qa-scooter.praktikum-services.ru/")
-    yield driver
-    driver.quit()
+@allure.feature("Логотипы")
+class TestLogoNavigation:
 
-def test_logo_navigation(driver):
-    main_page = MainPage(driver)
+    @allure.title("Проверка перехода по логотипу 'Самокат'")
+    def test_click_logo_scooter_redirects_to_main(self, driver):
+        main_page = MainPage(driver)
+        main_page.open()
+        main_page.click_logo_scooter()
+        assert "https://qa-scooter.praktikum-services.ru/ " in main_page.get_current_url(), \
+            "Не произошёл переход на главную страницу после клика по логотипу 'Самокат'"
 
-    # Переход по логотипу "Самокат"
-    main_page.click_logo_scooter()
-    assert "https://qa-scooter.praktikum-services.ru/" in driver.current_url, "Переход по логотипу 'Самокат' не выполнен"
-
-    # Переход по логотипу Яндекса
-    main_page.click_logo_yandex()
-    handles = driver.window_handles
-    driver.switch_to.window(handles[1])  # Переключаемся на новое окно
-    assert "https://dzen.ru" in driver.current_url, "Переход по логотипу Яндекса не выполнен"
+    @allure.title("Проверка перехода по логотипу Яндекса")
+    def test_click_logo_yandex_opens_dzen(self, driver):
+        main_page = MainPage(driver)
+        main_page.open()
+        main_page.click_logo_yandex()
+        main_page.wait_for_new_window()
+        main_page.switch_to_new_window()
+        assert "https://dzen.ru " in main_page.get_current_url(), \
+            "Не открылась страница Дзен после клика по логотипу Яндекса"

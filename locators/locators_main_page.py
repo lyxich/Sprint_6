@@ -12,3 +12,7 @@ class LocatorsMainPage:
     # Локаторы для раздела "Вопросы о важном"
     FAQ_QUESTION = (By.CLASS_NAME, "accordion__button")
     FAQ_ANSWER = (By.CLASS_NAME, "accordion__panel")
+
+    # Локаторы для куки баннера
+    COOKIE_BANNER = (By.CLASS_NAME, "cookie-banner")
+    CLOSE_BUTTON = (By.CLASS_NAME, "close-button")
